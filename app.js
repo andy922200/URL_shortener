@@ -20,7 +20,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // connect with database
-mongoose.connect('mongodb://localhost/urlShortenerLink', { useNewUrlParser: true, useCreateIndex: true })
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/urlShortenerLink', { useNewUrlParser: true, useCreateIndex: true })
 const db = mongoose.connection
 db.on('error', () => {
   console.log('mongodb error!')
