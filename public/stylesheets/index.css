@@ -76,6 +76,14 @@ img {
   border: 1px solid black;
 }
 
+.card a button{
+  margin: 20px auto;
+}
+
+.returnIndex{
+   text-align: center;
+}
+
 /*RWD*/
 @media screen and (min-width:415px) and (max-width:500px){
   nav a h2{

@@ -11,10 +11,14 @@ db.on('error', () => {
 })
 db.once('open', () => {
   console.log('db connected!')
+  const baseURL = "http://localhost:3000/"
+  let randomString = Math.random().toString(36).slice(-5)
+  let shortURL = ''
+  shortURL = baseURL + randomString
 
   Link.create({
-    link: 'https://www.books.com.tw/link/jshdksdhsdjfhdsjfwerty',
-    shortLink: 'https://tinyurl.com/7k3bd'
+    link: 'https://www.books.com.tw',
+    shortLink: shortURL
   })
 
   console.log('seed data is generated')
