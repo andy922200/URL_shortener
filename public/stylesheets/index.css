@@ -1,0 +1,86 @@
+/* ========== CSS 全區設定 ========== */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+*{
+  /*border-box：實際寬高＝所設定的數值(已包含border和padding)*/
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0px;
+  padding: 0px;
+  margin-bottom:5px;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+header {
+  overflow: hidden;
+}
+
+img {
+  height: auto;
+  display: block;
+  margin: 0px auto;
+}
+
+/*清除浮動效果，讓高度出現，方法II*/
+.clearfix:after{
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+.card{
+  border-style:none;
+}
+
+.card h5{
+  margin-top:10px;
+  font-size:28px;
+  text-align: center;
+}
+
+.card label{
+  font-size:24px;
+  margin:10px auto;
+}
+
+.card input{
+  margin:10px auto;
+  border: 1px solid black;
+}
+
+/*RWD*/
+@media screen and (min-width:415px) and (max-width:500px){
+  nav a h2{
+    font-size:28px;
+  }
+  
+}
+
+@media screen and (min-width:320px) and (max-width:414px){
+  nav a h2{
+    font-size:20px;
+  }
+  
+}
