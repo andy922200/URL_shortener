@@ -1,0 +1,12 @@
+<!-- ./views/result.handlebars-->
+<!-- load partial view of "messages" -->
+{{> messages}}
+<div class="card">
+  <div class="card-body mx-auto">
+    <h5>URL Shortener</h5>
+    <img src="/img/linkindex.jpg" alt="urlLogo">
+    <h5>成功生成短網址</h5>
+    <p>點選下方結果吧！</p>
+    <h5><a href={{originalLink}} target="_blank">{{shortURL}}</a></h5>
+  </div>
+</div>

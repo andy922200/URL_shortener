@@ -60,4 +60,4 @@ app.use((req, res, next) => {
 
 // load router settings
 app.use('/', require('./routes/home'))
-//app.use('/links', require('./routes/links'))
+app.use('/links', require('./routes/links'))
