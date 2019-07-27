@@ -1,4 +1,17 @@
 <!-- ./views/index.handlebars-->
 <!-- load partial view of "messages" -->
 {{> messages}}
-<h2>Test!</h2>
+<div class="card">
+  <div class="card-body mx-auto">
+    <h5>URL Shortener</h5>
+    <img src="https://picsum.photos/300" alt="urlLogo">
+    <form action="/links" method="post">
+      <div class="form-group">
+        <label for="originalLink">請輸入網址</label>
+        <input type="text" class="form-control" id="originalLink" name="originalLink"
+          placeholder="如：https://www.facebook.com">
+      </div>
+      <button type="submit" class="btn btn-primary">轉換</button>
+    </form>
+  </div>
+</div>
