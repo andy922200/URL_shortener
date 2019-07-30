@@ -33,10 +33,7 @@ router.post('/', formCheck, (req, res) => {
       if (err) return err
       // validate repeat shortURL
       if (results.length > 0) {
-        const expect = 20
-        while (randomString.length < expect) {
-          randomString = Math.random().toString(36).slice(-5)
-        }
+        randomString = Math.random().toString(36).slice(4, 9)
         shortURL = baseURL + randomString
       }
       Link.find({ "link": originalLink }, (err, results) => {
