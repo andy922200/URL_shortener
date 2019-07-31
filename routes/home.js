@@ -10,15 +10,26 @@ router.get('/', (req, res) => {
 })
 
 // redirect shortURL to originalUrl
-router.get(/[0-9A-Za-z]{5}/, (req, res) => {
-  //const baseUrl = 'http://localhost:3000'
-  const baseUrl = 'https://mighty-river-85810.herokuapp.com'
+router.get(/[0-9A-Za-z]{1,}/, (req, res) => {
+  const baseUrl = 'http://localhost:3000'
+  //const baseUrl = 'https://mighty-river-85810.herokuapp.com'
   let shortLink = baseUrl + req.url
   let originalLink = ''
-  Link.find({ "shortLink": shortLink }, (err, result) => {
-    originalLink = result[0]['link']
-    res.redirect(originalLink)
-  })
+  if (req.url.length !== 6) {
+    res.redirect('/')
+  } else {
+    Link.find({ "shortLink": shortLink }, (err, result) => {
+      if (!result) return res.redirect('/')
+      originalLink = result[0]['link']
+      res.redirect(originalLink)
+    })
+  }
+
 })
+
+router.get(/[^0-9A-Za-z]{1,}/, (req, res) => {
+  res.redirect('/')
+})
+
 
 module.exports = router

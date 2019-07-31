@@ -9,8 +9,8 @@ const formCheck = require('../models/validationRule')
 // send original Link to tinyURL proxy
 router.post('/', formCheck, (req, res) => {
   const errors = validationResult(req)
-  //const baseURL = "http://localhost:3000/"
-  const baseURL = "https://mighty-river-85810.herokuapp.com/"
+  const baseURL = "http://localhost:3000/"
+  //const baseURL = "https://mighty-river-85810.herokuapp.com/"
   let randomString = Math.random().toString(36).slice(-5)
   let originalLink = req.body.originalLink
   let shortURL = ''
@@ -32,26 +32,28 @@ router.post('/', formCheck, (req, res) => {
     Link.find({ "shortLink": shortURL }, (err, results) => {
       if (err) return err
       // validate repeat shortURL
-      if (results.length > 0) {
+      while (results.length > 0) {
         randomString = Math.random().toString(36).slice(4, 9)
         shortURL = baseURL + randomString
+        Link.find({ "shortLink": shortURL }, (err, results))
       }
-      Link.find({ "link": originalLink }, (err, results) => {
-        if (err) return err
-        // validate repeat original Link 
-        if (results.length > 0) {
-          shortURL = results[0]['shortLink']
-          res.render('result', { shortURL: shortURL, originalLink: originalLink })
-        } else {
-          link.save(err => {
-            if (err) return console.log(err)
-            res.render('result', { shortURL: shortURL, originalLink: originalLink })
-          })
-        }
-      })
     })
   }
 
+  Link.find({ "link": originalLink }, (err, results) => {
+    if (err) return err
+    // validate repeat original Link
+    if (results.length > 0) {
+      shortURL = results[0]['shortLink']
+      res.render('result', { shortURL: shortURL, originalLink: originalLink })
+    } else {
+      link.save(err => {
+        if (err) return console.log(err)
+        res.render('result', { shortURL: shortURL, originalLink: originalLink })
+      })
+    }
+  })
 })
 
 module.exports = router
+
