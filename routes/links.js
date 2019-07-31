@@ -9,8 +9,8 @@ const formCheck = require('../models/validationRule')
 // send original Link to tinyURL proxy
 router.post('/', formCheck, (req, res) => {
   const errors = validationResult(req)
-  //const baseURL = "http://localhost:3000/"
-  const baseURL = "https://mighty-river-85810.herokuapp.com/"
+  const baseURL = "http://localhost:3000/"
+  //const baseURL = "https://mighty-river-85810.herokuapp.com/"
   let randomString = Math.random().toString(36).slice(-5)
   let originalLink = req.body.originalLink
   let shortURL = ''
