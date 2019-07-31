@@ -15,10 +15,6 @@ router.post('/', formCheck, (req, res) => {
   let originalLink = req.body.originalLink
   let shortURL = ''
   shortURL = baseURL + randomString
-  const link = Link({
-    link: originalLink,
-    shortLink: shortURL
-  })
   if (!errors.isEmpty()) {
     let errorMessages = []
     console.log(errors)
@@ -32,27 +28,32 @@ router.post('/', formCheck, (req, res) => {
     Link.find({ "shortLink": shortURL }, (err, results) => {
       if (err) return err
       // validate repeat shortURL
-      while (results.length > 0) {
+      if (results.length > 0) {
         randomString = Math.random().toString(36).slice(4, 9)
         shortURL = baseURL + randomString
         Link.find({ "shortLink": shortURL }, (err, results))
       }
+
+      Link.find({ "link": originalLink }, (err, results) => {
+        const link = Link({
+          link: originalLink,
+          shortLink: shortURL
+        })
+        if (err) return err
+        // validate repeat original Link
+        if (results.length > 0) {
+          shortURL = results[0]['shortLink']
+          res.render('result', { shortURL: shortURL, originalLink: originalLink })
+        } else {
+          link.save(err => {
+            if (err) return console.log(err)
+            res.render('result', { shortURL: shortURL, originalLink: originalLink })
+          })
+        }
+      })
     })
   }
 
-  Link.find({ "link": originalLink }, (err, results) => {
-    if (err) return err
-    // validate repeat original Link
-    if (results.length > 0) {
-      shortURL = results[0]['shortLink']
-      res.render('result', { shortURL: shortURL, originalLink: originalLink })
-    } else {
-      link.save(err => {
-        if (err) return console.log(err)
-        res.render('result', { shortURL: shortURL, originalLink: originalLink })
-      })
-    }
-  })
 })
 
 module.exports = router
