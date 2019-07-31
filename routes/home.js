@@ -11,8 +11,8 @@ router.get('/', (req, res) => {
 
 // redirect shortURL to originalUrl
 router.get(/[0-9A-Za-z]{1,}/, (req, res) => {
-  const baseUrl = 'http://localhost:3000'
-  //const baseUrl = 'https://mighty-river-85810.herokuapp.com'
+  //const baseUrl = 'http://localhost:3000'
+  const baseUrl = 'https://mighty-river-85810.herokuapp.com'
   let shortLink = baseUrl + req.url
   let originalLink = ''
   if (req.url.length !== 6) {
