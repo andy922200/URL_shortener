@@ -7,10 +7,10 @@ const formCheck = require('../models/validationRule')
 
 
 // send original Link to tinyURL proxy
-router.post('/', formCheck, (req, res) => {
+router.post('/', formCheck, async (req, res) => {
   const errors = validationResult(req)
-  //const baseURL = "http://localhost:3000/"
-  const baseURL = "https://mighty-river-85810.herokuapp.com/"
+  const baseURL = "http://localhost:3000/"
+  //const baseURL = "https://mighty-river-85810.herokuapp.com/"
   let randomString = Math.random().toString(36).slice(-5)
   let originalLink = req.body.originalLink
   let shortURL = ''
@@ -25,36 +25,36 @@ router.post('/', formCheck, (req, res) => {
     }
     res.render('index', { errorMessages: errorMessages })
   } else {
-    Link.find({ "shortLink": shortURL }, (err, results) => {
-      if (err) return err
-      // validate repeat shortURL
+    try {
+      let results = await Link.find({ 'shortLink': shortURL }).exec()
       while (results.length > 0) {
         randomString = Math.random().toString(36).slice(4, 9)
         shortURL = baseURL + randomString
-        Link.find({ "shortLink": shortURL }, (err, results))
+        results = await Link.find({ 'shortLink': shortURL }).exec()
       }
-
-      Link.find({ "link": originalLink }, (err, results) => {
-        const link = Link({
-          link: originalLink,
-          shortLink: shortURL
-        })
-        if (err) return err
-        // validate repeat original Link
-        if (results.length > 0) {
-          shortURL = results[0]['shortLink']
-          res.render('result', { shortURL: shortURL, originalLink: originalLink })
-        } else {
-          link.save(err => {
-            if (err) return console.log(err)
-            res.render('result', { shortURL: shortURL, originalLink: originalLink })
+      Link.find({ "link": originalLink })
+        .exec((err, results) => {
+          const link = Link({
+            link: originalLink,
+            shortLink: shortURL
           })
-        }
-      })
-    })
+          if (err) return err
+          // validate repeat original Link
+          if (results.length > 0) {
+            shortURL = results[0]['shortLink']
+            res.render('result', { shortURL: shortURL, originalLink: originalLink })
+          } else {
+            link.save(err => {
+              if (err) return console.log(err)
+              res.render('result', { shortURL: shortURL, originalLink: originalLink })
+            })
+          }
+        })
+        .catch((err) => console.log(err))
+    } catch (error) {
+      console.log(error)
+    }
   }
-
 })
 
 module.exports = router
-
