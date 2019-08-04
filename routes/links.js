@@ -9,6 +9,7 @@ const formCheck = require('../models/validationRule')
 // send original Link to tinyURL proxy
 router.post('/', formCheck, async (req, res) => {
   let originalLink = req.body.originalLink
+  let errorMessages = []
   const errors = validationResult(req)
   //const baseURL = "http://localhost:3000/"
   const baseURL = "https://mighty-river-85810.herokuapp.com/"
@@ -21,7 +22,6 @@ router.post('/', formCheck, async (req, res) => {
   })
 
   if (!errors.isEmpty()) {
-    let errorMessages = []
     console.log(errors)
     //console.log(errors.array()[0]['msg'])
     for (let i = 0; i < errors.array().length; i++) {
@@ -31,7 +31,12 @@ router.post('/', formCheck, async (req, res) => {
     res.render('index', { errorMessages: errorMessages })
   } else {
     try {
+      let totalResults = await Link.find().exec()
       let results = await Link.find({ 'shortLink': shortURL }).exec()
+      if (totalResults.length === 36 ** 5) {
+        errorMessages.push({ message: '短網址已經用盡，請通知管理員' })
+        res.render('index', { errorMessages: errorMessages })
+      }
       while (results.length > 0) {
         randomString = Math.random().toString(36).slice(-5)
         shortURL = baseURL + randomString
