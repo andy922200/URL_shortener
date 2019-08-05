@@ -36,26 +36,27 @@ router.post('/', formCheck, async (req, res) => {
       if (totalResults.length === 36 ** 5) {
         errorMessages.push({ message: '短網址已經用盡，請通知管理員' })
         res.render('index', { errorMessages: errorMessages })
-      }
-      while (results.length > 0) {
-        randomString = Math.random().toString(36).slice(-5)
-        shortURL = baseURL + randomString
-        results = await Link.find({ 'shortLink': shortURL }).exec()
-      }
-      Link.find({ "link": originalLink })
-        .exec((err, results) => {
-          if (err) return err
-          // validate repeat original Link
-          if (results.length > 0) {
-            shortURL = results[0]['shortLink']
-            res.render('result', { shortURL: shortURL, originalLink: originalLink })
-          } else {
-            link.save(err => {
-              if (err) return console.log(err)
+      } else {
+        while (results.length > 0) {
+          randomString = Math.random().toString(36).slice(-5)
+          shortURL = baseURL + randomString
+          results = await Link.find({ 'shortLink': shortURL }).exec()
+        }
+        Link.find({ "link": originalLink })
+          .exec((err, results) => {
+            if (err) return err
+            // validate repeat original Link
+            if (results.length > 0) {
+              shortURL = results[0]['shortLink']
               res.render('result', { shortURL: shortURL, originalLink: originalLink })
-            })
-          }
-        })
+            } else {
+              link.save(err => {
+                if (err) return console.log(err)
+                res.render('result', { shortURL: shortURL, originalLink: originalLink })
+              })
+            }
+          })
+      }
     } catch (error) {
       console.log(error)
     }
